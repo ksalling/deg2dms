@@ -30,17 +30,13 @@ __copyright__ = '(C) 2021 by Ivan Lebedev'
 
 __revision__ = '$Format:%H$'
 
-from qgis.PyQt.QtCore import (QCoreApplication, QVariant)
+from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import (QgsProcessing,
                        QgsFeatureSink,
                        QgsProcessingAlgorithm,
                        QgsProcessingParameterFeatureSource,
                        QgsProcessingParameterFeatureSink,
-                       QgsProcessingParameterField,
-                       QgsField,
-                       QgsMessageLog,
-                       QgsFeature)
-from .dms_fun import deg2dms
+                       QgsProcessingParameterField)
 
 
 class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
@@ -63,8 +59,7 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
 
     OUTPUT = 'OUTPUT'
     INPUT = 'INPUT'
-    FIELD1 = 'FIELD1'
-    FIELD2 = 'FIELD2'
+    FIELD = 'FIELD'
 
     def initAlgorithm(self, config):
         """
@@ -92,16 +87,11 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
-        self.addParameter(QgsProcessingParameterField(self.FIELD1,
-                                                      self.tr('Text attribute to convert to float'),
-                                                      parentLayerParameterName='INPUT',
-                                                      type=QgsProcessingParameterField.Numeric
-                                                      ))
-        self.addParameter(QgsProcessingParameterField(self.FIELD2,
-                                                      self.tr('Text attribute to convert to float'),
-                                                      parentLayerParameterName='INPUT',
-                                                      type=QgsProcessingParameterField.Numeric
-                                                      ))
+        self.addParameter(QgsProcessingParameterField(self.FIELD,
+                                                        self.tr('Text attribute to convert to float'),
+                                                        parentLayerParameterName='INPUT',
+                                                        type=QgsProcessingParameterField.String
+                                                        ))
 
     def processAlgorithm(self, parameters, context, feedback):
         """
@@ -112,64 +102,21 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
         # to uniquely identify the feature sink, and must be included in the
         # dictionary returned by the processAlgorithm function.
         source = self.parameterAsSource(parameters, self.INPUT, context)
+        (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT,
+                context, source.fields(), source.wkbType(), source.sourceCrs())
 
-
-
-
-        new_fields = source.fields()
-        new_fields.append(QgsField('dms', QVariant.String))
-
-
-        (sink, dest_id) = self.parameterAsSink(
-            parameters,
-            self.OUTPUT,
-            context,
-            new_fields,
-            source.wkbType(),
-            source.sourceCrs()
-        )
-
-        # (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT,
-        #         context, source.fields(), source.wkbType(), source.sourceCrs())
         # Compute the number of steps to display within the progress bar and
         # get features from source
         total = 100.0 / source.featureCount() if source.featureCount() else 0
-
         features = source.getFeatures()
-
-        # Names of source fields
-        select_field1 = self.parameterAsString(
-            parameters,
-            self.FIELD1,
-            context)
-        select_field2 = self.parameterAsString(
-            parameters,
-            self.FIELD2,
-            context)
 
         for current, feature in enumerate(features):
             # Stop the algorithm if cancel button has been clicked
             if feedback.isCanceled():
                 break
-            # From module dms_fun
-            dms1 = deg2dms(feature[select_field1])
-            dms2 = deg2dms(feature[select_field2])
-
-            QgsMessageLog.logMessage(str(current))
-
-            http: // www.qgistutorials.com / fi_FI / docs / 3 / processing_python_scripts.html
-            new_feature = QgsFeature()
-            # Set geometry to dissolved geometry
-            new_feature.setGeometry(feature.geometry())
-            # Set attributes from sum_unique_values dictionary that we had computed
-            new_feature.setAttributes(feature)
-
-
-            # new_feature['dms'] = dms1
-            # feature.setAttributes([f[dissolve_field], sum_unique_values[f[dissolve_field]]])
 
             # Add a feature in the sink
-            sink.addFeature(new_feature, QgsFeatureSink.FastInsert)
+            sink.addFeature(feature, QgsFeatureSink.FastInsert)
 
             # Update the progress bar
             feedback.setProgress(int(current * total))
