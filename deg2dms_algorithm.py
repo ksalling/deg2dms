@@ -78,7 +78,7 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
                 self.tr('Input layer'),
-                [QgsProcessing.TypeVectorAnyGeometry]
+                #[QgsProcessing.TypeVectorAnyGeometry]
             )
         )
 
@@ -217,7 +217,7 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'Vector table'
+        return ''
 
     def tr(self, string):
         return QCoreApplication.translate('Processing', string)

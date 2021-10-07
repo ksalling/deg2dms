@@ -63,7 +63,7 @@ class Deg2dmsProvider(QgsProcessingProvider):
         string should be a unique, short, character only string, eg "qgis" or
         "gdal". This string should not be localised.
         """
-        return ''
+        return 'deg2dms'
 
     def name(self):
         """
@@ -72,7 +72,7 @@ class Deg2dmsProvider(QgsProcessingProvider):
 
         This string should be short (e.g. "Lastools") and localised.
         """
-        return self.tr('')
+        return self.tr('deg2dms')
 
     def icon(self):
         """
