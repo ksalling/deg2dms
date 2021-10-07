@@ -113,30 +113,6 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
         # dictionary returned by the processAlgorithm function.
         source = self.parameterAsSource(parameters, self.INPUT, context)
 
-
-
-
-        new_fields = source.fields()
-        new_fields.append(QgsField('dms', QVariant.String))
-
-
-        (sink, dest_id) = self.parameterAsSink(
-            parameters,
-            self.OUTPUT,
-            context,
-            new_fields,
-            source.wkbType(),
-            source.sourceCrs()
-        )
-
-        # (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT,
-        #         context, source.fields(), source.wkbType(), source.sourceCrs())
-        # Compute the number of steps to display within the progress bar and
-        # get features from source
-        total = 100.0 / source.featureCount() if source.featureCount() else 0
-
-        features = source.getFeatures()
-
         # Names of source fields
         select_field1 = self.parameterAsString(
             parameters,
@@ -146,9 +122,32 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
             parameters,
             self.FIELD2,
             context)
+        feedback.pushInfo('!!!!!!!!!!!!!!!!hi!!!!!!!!!!!!!!!!!!!')
+        # Append a new fields
+        new_fields = source.fields()
+        if select_field1 != select_field2:
+            new_fields.append(QgsField(select_field1 + '_dms', QVariant.String))
+            new_fields.append(QgsField(select_field2 + '_dms', QVariant.String))
+            dms1_id = new_fields.indexOf(select_field1 + '_dms')
+            dms2_id = new_fields.indexOf(select_field2 + '_dms')
+        elif select_field1 == select_field2:
+            new_fields.append(QgsField(select_field1 + '_dms', QVariant.String))
+            dms1_id = new_fields.indexOf(select_field1 + '_dms')
+        else:
+            return {self.OUTPUT: dest_id}
 
-        QgsMessageLog.logMessage('------')
-
+        (sink, dest_id) = self.parameterAsSink(
+            parameters,
+            self.OUTPUT,
+            context,
+            new_fields,
+            source.wkbType(),
+            source.sourceCrs()
+        )
+        # Progress bar
+        total = 100.0 / source.featureCount() if source.featureCount() else 0
+        features = source.getFeatures()
+        # PROCESSING
         for current, feature in enumerate(features):
             # Stop the algorithm if cancel button has been clicked
             if feedback.isCanceled():
@@ -156,25 +155,22 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
             # From module dms_fun
             dms1 = deg2dms(feature[select_field1])
             dms2 = deg2dms(feature[select_field2])
-
-            QgsMessageLog.logMessage(str(current))
-
             new_feature = QgsFeature()
-            # Set geometry to dissolved geometry
+            # Set geometry
             new_feature.setGeometry(feature.geometry())
             # Set attributes from sum_unique_values dictionary that we had computed
             new_feature.setFields(new_fields)
-
             attrib = feature.attributes()
+            # Fill new feature attribues from old
+            for i, attr in enumerate(attrib):
+                new_feature.setAttribute(i, attr)
+            # Add compute attributes
+            if select_field1 != select_field2:
+                new_feature.setAttribute(dms1_id, dms1)
+                new_feature.setAttribute(dms2_id, dms2)
+            elif select_field1 == select_field2:
+                new_feature.setAttribute(dms1_id, dms1)
 
-            QgsMessageLog.logMessage(str(new_feature.attributes()))
-
-            new_feature.setAttributes(attrib)
-
-            QgsMessageLog.logMessage(str(new_feature.attributes()))
-
-
-            new_feature.setAttribute(2,dms1)
             # Add a feature in the sink
             sink.addFeature(new_feature, QgsFeatureSink.FastInsert)
 

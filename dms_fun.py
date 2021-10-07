@@ -30,6 +30,7 @@ __copyright__ = '(C) 2021 by Ivan Lebedev'
 
 __revision__ = '$Format:%H$'
 
+
 def dms2deg(dms):
     dmss = dms.split()
     return float(dmss[0]) + float(dmss[1]) / 60 + float(dmss[2]) / 3600
@@ -39,4 +40,4 @@ def deg2dms(deg):
     d = int(deg)
     m = int((deg - d) * 60)
     s = float(((deg - d) * 60 - m) * 60)
-    return '{},{},{}'.format(d, m, s)
+    return '{} {} {}'.format(d, m, round(s, 2))
