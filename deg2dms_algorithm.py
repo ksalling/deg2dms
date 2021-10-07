@@ -147,6 +147,8 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
             self.FIELD2,
             context)
 
+        QgsMessageLog.logMessage('------')
+
         for current, feature in enumerate(features):
             # Stop the algorithm if cancel button has been clicked
             if feedback.isCanceled():
@@ -157,17 +159,22 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
 
             QgsMessageLog.logMessage(str(current))
 
-            http: // www.qgistutorials.com / fi_FI / docs / 3 / processing_python_scripts.html
             new_feature = QgsFeature()
             # Set geometry to dissolved geometry
             new_feature.setGeometry(feature.geometry())
             # Set attributes from sum_unique_values dictionary that we had computed
-            new_feature.setAttributes(feature)
+            new_feature.setFields(new_fields)
+
+            attrib = feature.attributes()
+
+            QgsMessageLog.logMessage(str(new_feature.attributes()))
+
+            new_feature.setAttributes(attrib)
+
+            QgsMessageLog.logMessage(str(new_feature.attributes()))
 
 
-            # new_feature['dms'] = dms1
-            # feature.setAttributes([f[dissolve_field], sum_unique_values[f[dissolve_field]]])
-
+            new_feature.setAttribute(2,dms1)
             # Add a feature in the sink
             sink.addFeature(new_feature, QgsFeatureSink.FastInsert)
 
