@@ -10,7 +10,7 @@ version=0.1
 author=Ivan Lebedev
 email=lebedev77@gmail.com
 
-about=I'l write it later
+about=The plugin converts one or two columns containing angular values in degree format like FLOAT or DOUBLE to the DMS format. Example degree=81.76249166666666 => dms = 81°45′44.97″
 
 tracker=https://github.com/inouterer/deg2dms
 repository=https://github.com/inouterer/deg2dms
