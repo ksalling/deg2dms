@@ -193,7 +193,7 @@ class Deg2dmsAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'Deg2DMS'
+        return 'Convert degree to DMS'
 
     def displayName(self):
         """

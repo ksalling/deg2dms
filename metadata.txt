@@ -3,9 +3,9 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Deg to DMS table converter
+name=Degree to DMS table converter
 qgisMinimumVersion=3.0
-description=This plugin converts deg to DMS in table
+description=This processing plugin converts degree to DMS in table
 version=0.1
 author=Ivan Lebedev
 email=lebedev77@gmail.com
