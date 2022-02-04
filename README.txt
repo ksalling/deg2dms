@@ -1,7 +1,7 @@
 Plugin Builder Results
 
-Your plugin Deg2dms was created in:
-    C:/PycharmProjects/deg2dms\deg2dms
+Your plugin Dms2deg was created in:
+    C:/Users/Иван/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins/dms_2_deg
 
 Your QGIS plugin directory is located at:
     C:/Users/Иван/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins
@@ -15,7 +15,7 @@ What's Next:
 
   * Test the plugin by enabling it in the QGIS plugin manager
 
-  * Customize it by editing the implementation file: ``deg2dms.py``
+  * Customize it by editing the implementation file: ``dms_2_deg.py``
 
   * You can use the Makefile to compile your Ui and resource files when
     you make changes. This requires GNU make (gmake)

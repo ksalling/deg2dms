@@ -3,14 +3,14 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Degree to DMS table converter
+name=DMS to degree table converter
 qgisMinimumVersion=3.0
-description=This processing plugin converts degree to DMS in table
-version=0.1
+description=This processing plugin converts DMS to degree in table
+version=0.3
 author=Ivan Lebedev
 email=lebedev77@gmail.com
 
-about=The plugin converts one or two columns containing angular values in degree format like FLOAT or DOUBLE to the DMS format. Example degree=81.76249166666666 => dms = 81°45′44.97″
+about=The plugin converts one or two columns containing angular values in DMS format to the degree format DOUBLE. Example dms = 81°45′44.97″ => degree=81.76249166666666
 
 tracker=https://github.com/inouterer/deg2dms
 repository=https://github.com/inouterer/deg2dms
@@ -27,7 +27,7 @@ tags=python
 
 homepage=https://github.com/inouterer/deg2dms
 category=Analysis
-icon=icon.png
+icon=deg2dms.png
 # experimental flag
 experimental=False
 

@@ -1,9 +1,9 @@
 #/***************************************************************************
-# Deg2dms
+# Dms2deg
 #
-# This plugin converts deg to DMS in table
+# This plugin converts DMS to degree
 #							 -------------------
-#		begin				: 2021-10-04
+#		begin				: 2021-10-07
 #		git sha				: $Format:%H$
 #		copyright			: (C) 2021 by Ivan Lebedev
 #		email				: lebedev77@gmail.com
@@ -38,13 +38,13 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	deg2dms.py 
+	dms_2_deg.py 
 
-PLUGINNAME = deg2dms
+PLUGINNAME = dms_2_deg
 
 PY_FILES = \
 	__init__.py \
-	deg2dms.py 
+	dms_2_deg.py 
 
 UI_FILES = 
 

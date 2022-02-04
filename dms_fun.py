@@ -32,12 +32,30 @@ __revision__ = '$Format:%H$'
 
 
 def dms2deg(dms):
-    dmss = dms.split()
-    return float(dmss[0]) + float(dmss[1]) / 60 + float(dmss[2]) / 3600
-
+    num_list = []
+    num = ''
+    for char in dms:
+        if char.isdigit() or char == '.' or char == ',':
+            num = num + char
+        else:
+            if num != '':
+                num_list.append(str(num))
+                num = ''
+    if num != '':
+        num_list.append(str(num))
+     
+    print(num_list)
+    
+   
+    degs = num_list[0]
+    minuts = num_list[1]
+    seconds = num_list[2]
+    deg = float(degs) + float(minuts) / 60 + float(seconds) / 3600
+    return deg
 
 def deg2dms(deg):
     d = int(deg)
     m = int((deg - d) * 60)
     s = float(((deg - d) * 60 - m) * 60)
-    return '{}°{}′{}″'.format(d, m, round(s, 2))
+    return "{}°{}'{}''".format(d, m, round(s, 2))
+
