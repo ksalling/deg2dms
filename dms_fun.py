@@ -55,7 +55,7 @@ def dms2deg(dms):
 
 def deg2dms(deg):
     d = int(deg)
-    m = int((deg - d) * 60)
-    s = float(((deg - d) * 60 - m) * 60)
-    return "{}°{}'{}''".format(d, m, round(s, 2))
+    m = float(((deg - d) * 60 - d) * 60)
+    # s = float(((deg - d) * 60 - m) * 60)
+    return "{}°{}'".format(d, round(m, 2))
 
